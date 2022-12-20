@@ -1,10 +1,11 @@
 public class Main {
   public static void main(String[] args) {
-    Pokemon emolga = new Pokemon("Emolga", "Electric", "Flying");
-    Pokemon excadrill = new Pokemon("Excadrill", "Ground", "Steel");
-    Pokemon swampert = new Pokemon("Swampert", "Water", "Ground");
+    Stats swampertStats = new Stats(100, 110, 90, 85, 90, 60);
+    Move moveOne = new Move("Water Pulse", 60, 100, "Water");
+    Move moveTwo = new Move("Take Down", 90, 85, "Normal");
+    Move[] swampertMoveset = { moveOne, moveTwo };
 
-    System.out.println(emolga.Defend(new Type("Ground")));
-    System.out.println(swampert.Defend(new Type("Grass")));
+    Swampert swampert = new Swampert(swampertStats, swampertMoveset);
+    System.out.println(swampert.attack(swampert.moveset.moveset[0], swampert));
   }
 }

@@ -1,22 +1,38 @@
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Pokemon {
   String name;
   Type primaryType;
   Type secondaryType;
+  Stats stats;
+  Moveset moveset;
 
-  public Pokemon(String thisName, String thisPrimaryType, String thisSecondaryType) {
-    name = thisName;
-    primaryType = new Type(thisPrimaryType);
-    secondaryType = new Type(thisSecondaryType);
+  public Pokemon(String name, String primaryType, String secondaryType, Stats stats, Moveset moveset) {
+    this.name = name;
+    this.primaryType = new Type(primaryType);
+    this.secondaryType = new Type(secondaryType);
+    this.stats = stats;
+    this.moveset = moveset;
   }
 
-  public double Defend(Type attackType) {
-    double multiplier = 1.0;
+  public double attack(Move attackMove, Pokemon defendingPokemon) {
+    // Reference: https://bulbapedia.bulbagarden.net/wiki/Damage
+    // Assuming level 50
+    double atkStat = this.stats.atk;
+    double defStat = defendingPokemon.stats.def;
 
-    if (Arrays.asList(Types.types).contains(primaryType.type)) multiplier *= Types.getCalc(attackType, primaryType);
-    if (Arrays.asList(Types.types).contains(secondaryType.type)) multiplier *= Types.getCalc(attackType, secondaryType);
+    double critical = Math.random() * 24 == 1 ? 1.5 : 1;
+    double random = ThreadLocalRandom.current().nextInt(85, 100 + 1) / 100.0;
+    double stab = 1;
 
-    return multiplier;
+    if (attackMove.type == this.primaryType || attackMove.type == this.secondaryType) {
+      stab = 1.5;
+    }
+
+    double typeEff = Types.getCalc(attackMove.type, defendingPokemon.primaryType);
+    if (Arrays.asList(Types.types).contains(defendingPokemon.secondaryType.type)) typeEff *= Types.getCalc(attackMove.type, defendingPokemon.secondaryType);
+
+    return Math.floor((((2.0 * 50 / 5 + 2) * attackMove.power * (atkStat / defStat)) / 50 + 2) * critical * random * stab);
   }
 }
