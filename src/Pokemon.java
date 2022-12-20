@@ -7,13 +7,17 @@ public class Pokemon {
   Type secondaryType;
   Stats stats;
   Moveset moveset;
+  private int[] iv;
+  private int[] ev;
 
-  public Pokemon(String name, String primaryType, String secondaryType, Stats stats, Moveset moveset) {
+  public Pokemon(String name, String primaryType, String secondaryType, Stats stats, Moveset moveset, int[] iv, int[] ev) {
     this.name = name;
     this.primaryType = new Type(primaryType);
     this.secondaryType = new Type(secondaryType);
     this.stats = stats;
     this.moveset = moveset;
+    this.iv = iv;
+    this.ev = ev;
   }
 
   public double attack(Move attackMove, Pokemon defendingPokemon) {
